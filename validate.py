@@ -1,6 +1,11 @@
 import json
+import sys
 
-filename = "bi0c7p4syj.jsonl"
+if len(sys.argv) < 2:
+    print("Usage: python3 validate.py <filename.jsonl>")
+    sys.exit(1)
+
+filename = sys.argv[1]
 with open(filename, "r") as f:
     lines = f.readlines()
 
