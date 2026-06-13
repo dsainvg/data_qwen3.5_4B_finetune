@@ -4,6 +4,7 @@ This report evaluates the data quality for the generated multi-domain menu-based
 
 ## Global Dataset Findings
 - **Data Structure Consistency:** Excellent. Every dataset strictly follows the `{"task": "...", "turns": [...]}` structure constraint.
+- **Memory Tool Cleanup:** MEM usage and memory notes have been completely removed across the entire dataset. Context previously stored via MEM is now accurately kept directly within the `reason` fields as required.
 - **Task Descriptions:** Every single one of the 1,200 traces (60 traces across 20 files) has a completely unique task description, adhering to the required task diversity guidelines without using generic fallback text.
 - **State Machine Integrity:** The agent state flow consistently starts at "Home", navigates to sub-menus properly, uses `BACK` effectively, and executes tools properly by adhering to the menu indices instead of tool names.
 

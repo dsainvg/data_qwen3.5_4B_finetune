@@ -9,7 +9,7 @@ to fine-tune Qwen3.5-4B to navigate tasks using a custom menu-based agent interf
 This agent does NOT call tools by name. It navigates a hierarchical menu interface. 
 At every step it sees its current state and a short numbered menu, picks a number, 
 and either drills deeper or executes a tool. 
-It has memory and back navigation. 
+It has back navigation.
  
 --- 
  
@@ -18,7 +18,6 @@ It has memory and back navigation.
 USER: 
 [TASK]: <the user's original task, repeated every turn> 
 [STATE]: <where the agent currently is, e.g. "Home" or "Web & Search"> 
-[MEMORY]: <stored note, only present if MEM was used earlier in this trace> 
 [RESULT]: <output of the last tool call, only present after a tool was executed> 
 [MENU]: 
   1. Web & Search — search, browse, summarise pages 
@@ -92,7 +91,7 @@ Examples of correctly typed args:
  
 - Start state is always "Home" 
 - Picking a domain (1–7) from Home → enters that domain's sub-menu 
-- Sub-menus show 4–8 specific tools for that domain with typed arg hints, plus MEM / BACK / DONE always at the bottom 
+- Sub-menus show 4–8 specific tools for that domain with typed arg hints, plus BACK / DONE always at the bottom
 - Picking a tool → executes it → next USER turn shows [RESULT] + updated [STATE] + refreshed [MENU] 
 - BACK → returns to previous state (stack-based, usable up to 2 times per trace) 
 - DONE → ends the trace, no further turns 
@@ -158,14 +157,6 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   5. take_screenshot 
   6. BACK 
   7. DONE 
- 
-### Memory & Notes  [STATE: "Memory & Notes"] 
-  1. save_note [content: `multiline_string`] 
-  2. read_notes 
-  3. delete_note [id: `int`] 
-  4. search_notes [keyword: `string`] 
-  5. BACK 
-  6. DONE 
  
 --- 
  
