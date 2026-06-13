@@ -27,10 +27,8 @@ USER:
   4. Code & Dev — run code, git, debug 
   5. Data & Math — compute, analyse, plot 
   6. System & OS — manage processes, clipboard, system info 
-  7. Memory & Notes — store and recall personal notes 
-  8. MEM [note: `string`] — store a memory note (10–20 words exactly) 
-  9. BACK — go to previous state 
-  10. DONE — task is complete 
+  8. BACK — go to previous state 
+  9. DONE — task is complete 
  
 ASSISTANT: 
 { 
@@ -44,7 +42,7 @@ Rules for the JSON:
 - "action" is always an integer from the menu 
 - "args" is ONLY present when the chosen menu option has typed placeholders 
 - If the chosen option has no args, omit "args" entirely 
-- For MEM: args is {"note": "<10–20 words exactly>"} 
+ 
 - The entire assistant response is this single JSON object and nothing else 
 - No XML tags, no markdown, no text outside the JSON object 
  
@@ -98,7 +96,7 @@ Examples of correctly typed args:
 - Picking a tool → executes it → next USER turn shows [RESULT] + updated [STATE] + refreshed [MENU] 
 - BACK → returns to previous state (stack-based, usable up to 2 times per trace) 
 - DONE → ends the trace, no further turns 
-- [MEMORY] line appears in every USER turn after MEM has been used at least once in that trace 
+ 
 - [RESULT] line only appears after a tool was executed, not after domain navigation or BACK 
  
 --- 
@@ -113,9 +111,8 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. summarise_page 
   4. extract_links 
   5. get_page_title 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### Files & Docs  [STATE: "Files & Docs"] 
   1. read_file [path: `path`] 
@@ -123,9 +120,8 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. append_file [path: `path`, content: `multiline_string`] 
   4. list_directory [path: `path`] 
   5. delete_file [path: `path`] 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### Calendar & Email  [STATE: "Calendar & Email"] 
   1. read_emails 
@@ -133,9 +129,8 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. create_event [title: `string`, date: `date`, time: `time`] 
   4. list_events 
   5. check_availability [date: `date`] 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### Code & Dev  [STATE: "Code & Dev"] 
   1. run_python [code: `multiline_string`] 
@@ -143,9 +138,8 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. git_status 
   4. git_commit [message: `string`] 
   5. read_error_logs 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### Data & Math  [STATE: "Data & Math"] 
   1. calculate [expression: `math_expr`] 
@@ -153,9 +147,8 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. analyse_csv [path: `path`] 
   4. convert_units [value: `float`, from: `string`, to: `string`] 
   5. run_sql [query: `sql`] 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### System & OS  [STATE: "System & OS"] 
   1. get_clipboard 
@@ -163,18 +156,16 @@ When the agent enters a domain, show this sub-menu (STATE updates accordingly):
   3. list_processes 
   4. get_system_info 
   5. take_screenshot 
-  6. MEM [note: `string`] 
-  7. BACK 
-  8. DONE 
+  6. BACK 
+  7. DONE 
  
 ### Memory & Notes  [STATE: "Memory & Notes"] 
   1. save_note [content: `multiline_string`] 
   2. read_notes 
   3. delete_note [id: `int`] 
   4. search_notes [keyword: `string`] 
-  5. MEM [note: `string`] 
-  6. BACK 
-  7. DONE 
+  5. BACK 
+  6. DONE 
  
 --- 
  
@@ -192,19 +183,6 @@ Examples:
   git_status    → "On branch main\nModified: src/agent.py\nUntracked: tests/test_new.py" 
   run_shell     → "total 48\ndrwxr-xr-x  3 user user 4096 Sep 10 14:22 src\n-rw-r--r--  1 user user 1832 Sep 10 14:21 README.md" 
   get_system_info → "OS: Ubuntu 22.04\nCPU: 8 cores @ 3.2GHz\nRAM: 6.2GB / 16GB used\nDisk: 42GB / 256GB used" 
- 
---- 
- 
-## MEMORY NOTE RULE — CRITICAL 
- 
-The "note" value must be exactly 10–20 words. Count every word before writing. 
- 
-BAD (8 words):  "User wants the BBC article saved to file" 
-BAD (22 words): "Found a BBC article about climate change from 2024 that the user wants summarised and then saved to a notes file" 
-GOOD (14 words): "Found BBC climate article 2024, user wants summary written to /home/user/climate.txt" 
- 
-After MEM is used, [MEMORY]: <note> appears in every subsequent USER turn in that trace. 
-The agent's "reason" field in later turns must reference the memory when it is relevant. 
  
 --- 
  
@@ -241,7 +219,7 @@ Each line of the JSONL file is one complete trace:
  
 The "assistant" field value is the JSON object serialised as a string (JSON-in-JSON). 
 Every line must be valid JSON. 
-Validate every MEM note is 10–20 words before writing the line. 
+ 
  
 --- 
  
@@ -256,7 +234,7 @@ Validate every MEM note is 10–20 words before writing the line.
    8 traces — Short tasks: completed in exactly 2–3 turns, DONE chosen early 
  
 Across all 60 traces: 
-  - At least 40 traces use MEM at least once 
+   
   - At least 20 traces use BACK at least once 
   - Every domain must appear as the primary domain in at least 5 traces 
   - Task descriptions must be natural, varied, and realistic — no two tasks the same 
@@ -270,7 +248,7 @@ Across all 60 traces:
 - No tool names as the "action" value — integers only 
 - No "args" key when the chosen option has no typed placeholders 
 - No vague tool results: never "success", "done", "result returned", "output here" 
-- No memory notes under 10 words or over 20 words 
+ 
 - No DONE before the task is genuinely complete 
 - No invented tool names outside the domain sub-menus above 
 - No placeholder values in args like "your_query", "example.com", "some text" 
@@ -280,5 +258,5 @@ Across all 60 traces:
 ## DELIVERABLE 
  
 Filename: agent_menu_dataset.jsonl
-Validate MEM word counts before writing each line.
+
 take time to do a single file with random string as name 

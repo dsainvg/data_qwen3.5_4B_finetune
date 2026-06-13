@@ -6,7 +6,6 @@ This report evaluates the data quality for the generated multi-domain menu-based
 - **Data Structure Consistency:** Excellent. Every dataset strictly follows the `{"task": "...", "turns": [...]}` structure constraint.
 - **Task Descriptions:** Every single one of the 1,200 traces (60 traces across 20 files) has a completely unique task description, adhering to the required task diversity guidelines without using generic fallback text.
 - **State Machine Integrity:** The agent state flow consistently starts at "Home", navigates to sub-menus properly, uses `BACK` effectively, and executes tools properly by adhering to the menu indices instead of tool names.
-- **MEM Tool Utilization:** Found strictly accurate adherence to the 10-20 word count rule for every call utilizing the MEM tool.
 
 ## File Level Evaluation
 
